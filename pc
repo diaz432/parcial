@@ -1,0 +1,208 @@
+// CARLOS ADIEL DIAZ DEL CID
+// DD18003
+// PROGRAMACION 1
+// ING. LIGIA ASTRID HERNANDEZ
+
+#include <windows.h>
+#include <MMSystem.h>//conjuntos de librerias que utilice para realizar este programa
+#include <iostream>
+
+
+
+//agrega std a cada linea de codigo de manera imaginaria no visible
+using namespace std;
+  
+
+
+
+/*INTRODUCCION DE LOS NODOS
+  _________________________*/
+struct nodo
+{
+    int nro;
+    struct nodo *sgte;
+};
+ 
+ 
+/*ESTRUCTURACION DE COLA
+  ----------------------*/
+struct cola
+{
+    nodo *delante;
+    nodo *atras  ;
+};
+ 
+ 
+/*INTRODUCCION DE ELEMENTOS A COLA
+  *********************************/
+void intro( struct cola &g, int valor )
+{
+     struct nodo *aux = new(struct nodo);
+     
+     aux->nro = valor;
+     
+	 aux->sgte = NULL;
+     
+     if( g.delante == NULL)
+     
+	     g.delante = aux;   // encola el primero elemento
+     
+	 else
+     
+	     (g.atras)->sgte = aux;
+     
+	     
+     g.atras = aux;        // puntero que siempre apunta al ultimo elemento
+     
+}
+ 
+/*DESENCOLAMIENTO DE ELEMENTOS
+  """"""""""""""""""""""""""""*/
+int sacar( struct cola &g )
+
+{
+
+     int num ;
+
+     struct nodo *aux ;
+
+     
+     aux = g.delante;      // aux apunta al inicio de la cola
+
+     num = aux->nro;
+
+     g.delante = (g.delante)->sgte;
+
+     delete(aux);          // libera memoria a donde apuntaba aux
+
+     
+     return num;
+}
+ 
+/*MUESTRA DE LA COLA
+  ������������������*/
+void mostrar( struct cola g )
+{
+     struct nodo *aux;
+     
+     aux = g.delante;
+         
+     while( aux != NULL )
+     {
+            cout<<"   "<< aux->nro ;
+            aux = aux->sgte;
+     }    
+}
+ 
+/*VACIAR LA COLA
+  ==============*/
+void vaciar( struct cola &g)
+{
+     struct nodo *aux;
+     
+     while( g.delante != NULL)
+     {
+            aux = g.delante;
+
+            g.delante = aux->sgte;
+
+            delete(aux);
+     }
+     g.delante = NULL;
+
+     g.atras   = NULL;
+     
+}
+ 
+/*MENU INTRODUCTORIO
+  *******************/
+
+void menu()
+
+{
+
+
+    cout<<"\n\t        BIENVENIDO"<<endl;  system("pause"); system("cls");
+    cout<<"      BANCO FUTURO A SUS SERVICIOS"<<endl;  system("pause"); system("cls");
+    cout<<"\n\t por favor ingrese un numero \n\n";
+    cout<<" 1. INGRESAR                               "<<endl;
+    cout<<" 2. SACAR                            "<<endl;
+    cout<<" 3. MOSTRAR COLA                          "<<endl;
+    cout<<" 4. LIMPIAR COLA                           "<<endl;
+    cout<<" 5. SALIR                                 "<<endl;
+ 
+    cout<<"\n INGRESE SU PREFERENCIA: ";
+}
+ 
+ 
+/*CUERPO ESTRUCTURADO DEL PROGRAMA
+  --------------------------------*/
+int main()
+{
+
+	
+    struct cola g;
+   
+    g.delante = NULL;
+    g.atras   = NULL;
+   
+   
+    int dato;  // numero a encolar
+    int ms;    // opcion del menu
+    int x ;    // numero que devuelve la funcon pop
+ 
+ 
+   
+    system("color 4f");
+ 
+ 
+ 
+    do
+    {
+        menu();  cin>> ms;
+ 
+ 
+ 
+        switch(ms)
+        {
+ 
+ 
+            case 1://el caso 1 es para introducir nuevos numeros a la cola
+ 
+                 cout<< "\n NUMERO A ENCOLAR: "; cin>> dato;
+                 intro( g, dato );
+                 cout<<"\n\n\t\tNumero " << dato << " encolado...\n\n";
+            break;
+ 
+ 
+ 
+            case 2://el caso dos sirve para sacar los numeros que siguen en la cola y ya fueron atendidos
+ 
+                 x = sacar( g );
+                 cout<<"\n\n\t\tNumero "<< x <<" desencolado...\n\n";
+            break;
+                 
+ 
+            case 3://el caso 3 muestra los numeros que siguen el la cola
+ 
+                 cout << "\n\n MOSTRANDO COLA\n\n";
+                 if(g.delante!=NULL) mostrar( g );
+                 else   cout<<"\n\n\tCola vacia...!"<<endl;
+            break;
+ 
+ 
+            case 4://El caso 4 sirve para vaciar la cola en otras palabras borrar todos los datos
+ 
+                 vaciar( g );
+                 cout<<"\n\n\t\tHecho...\n\n";
+            break;
+           
+         }
+ 
+        cout<<endl<<endl;
+        system("pause");  system("cls");
+ 
+    }while(ms!=5);
+    
+    return 0;
+}
